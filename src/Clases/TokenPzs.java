@@ -9,14 +9,14 @@ package Clases;
  *
  * @author Alex
  */
-public class Token {
+public class TokenPzs {
 
-    public String lexema;
+   public String lexema;
     public String lexico;
     public int Fila;
     public int Columna;
 
-    public Token(String lexema, String lexico, int Fila, int Columna) {
+    public TokenPzs(String lexema, String lexico, int Fila, int Columna) {
         this.lexema = lexema;
         this.lexico = lexico;
         this.Fila = Fila;

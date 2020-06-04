@@ -5,6 +5,8 @@
  */
 package Interfaz;
 
+import Analizador.Analizador_Nivel;
+import Analizador.Analizador_Piezas;
 import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,6 +19,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.BadLocationException;
 
 /**
  *
@@ -24,9 +27,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class Inicio extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Inicio
-     */
+    private String[] cadenalvl;
+    private String[] cadenapzs;
+    private Analizador.Analizador_Nivel AnalizadorLVL = new Analizador_Nivel();
+    private Analizador.Analizador_Piezas AnalizadorPZS = new Analizador_Piezas();
+
     public Inicio() {
         initComponents();
     }
@@ -175,12 +180,22 @@ public class Inicio extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu2.setText("Juego");
 
         jMenuItem2.setText("Analizar lvl.");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem2);
 
         jMenuItem6.setText("Analiza Pz.");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem6);
 
         jMenuItem7.setText("Iniciar");
@@ -286,6 +301,53 @@ public class Inicio extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error al Abrir");
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        int linea = TextNiveles.getLineCount();
+        cadenalvl = new String[linea];
+        int inicio = 0;
+        int fin = 0;
+        for (int i = 0; i < linea; i++) {
+            try {
+                inicio = TextNiveles.getLineStartOffset(i);
+                fin = TextNiveles.getLineEndOffset(i);
+            } catch (BadLocationException ex) {
+                Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                cadenalvl[i] = TextNiveles.getText(inicio, fin - inicio);
+            } catch (BadLocationException ex) {
+                Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        for (int pos = 0; pos < cadenalvl.length; pos++) {
+            AnalizadorLVL.analizadorNivel(cadenalvl[pos], pos);
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        int linea = TextPiezas.getLineCount();
+        cadenapzs = new String[linea];
+        int inicio = 0;
+        int fin = 0;
+        for (int i = 0; i < linea; i++) {
+            try {
+                inicio = TextPiezas.getLineStartOffset(i);
+                fin = TextPiezas.getLineEndOffset(i);
+            } catch (BadLocationException ex) {
+                Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                cadenapzs[i] = TextPiezas.getText(inicio, fin - inicio);
+            } catch (BadLocationException ex) {
+                Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        for (int pos = 0; pos < cadenapzs.length; pos++) {
+            AnalizadorPZS.analizadorPieza(cadenapzs[pos], pos);
+        }
+
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     /**
      * @param args the command line arguments

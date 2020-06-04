@@ -9,14 +9,14 @@ package Clases;
  *
  * @author Alex
  */
-public class ErrorToken {
+public class ErrorTokenPzs {
 
-     public String Caracter;
+    public String Caracter;
     public String Descripcion;
     public int fila;
     public int columna;
 
-    public ErrorToken(String Caracter, String Descripcion, int fila, int columna) {
+    public ErrorTokenPzs(String Caracter, String Descripcion, int fila, int columna) {
         this.Caracter = Caracter;
         this.Descripcion = Descripcion;
         this.fila = fila;
