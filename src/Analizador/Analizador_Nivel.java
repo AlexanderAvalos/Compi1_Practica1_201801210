@@ -21,16 +21,16 @@ public class Analizador_Nivel {
     private boolean continua = false, cierre = false;
     private int estado = 0;
     private String lexema = "";
+    private boolean primero = true;
 
     public void analizadorNivel(String linea, int fila) {
         row = fila;
         char[] caracter;
         char codCaracter;
-        int carac = 0;
         for (columna = 0; columna < linea.length(); columna++) {
             caracter = linea.toCharArray();
             codCaracter = caracter[columna];
-            carac = (int) caracter[columna];
+
             if (estado == 0 && continua == false) {
                 estado = iniciales(codCaracter);
             }
@@ -45,10 +45,6 @@ public class Analizador_Nivel {
                         estado = iniciales(codCaracter);
                     }
                     break;
-                case 2:
-                    lst_token.add(new Token(codCaracter + "", "Guion", fila, columna));
-                    estado = iniciales(codCaracter);
-                    break;
                 case 3:
                     if (Character.isLetterOrDigit(codCaracter) || codCaracter == '_') {
                         lexema = lexema + codCaracter;
@@ -56,7 +52,7 @@ public class Analizador_Nivel {
                     } else {
                         lst_token.add(new Token(lexema, "ID", fila, columna));
                         lexema = "";
-                        estado = iniciales(codCaracter);
+                        estado = 0;
                     }
                     break;
                 case 4:
@@ -68,13 +64,14 @@ public class Analizador_Nivel {
                     break;
                 case 5:
                     if (codCaracter == '!') {
+                        lexema = lexema + codCaracter;
                         estado = 7;
                     }
                     break;
                 case 6:
                     if (codCaracter == '\n' && cierre == true) {
                         lexema = lexema + codCaracter;
-                        lst_token.add(new Token(lexema, "Comentario Linea", fila, columna));
+                        lst_token.add(new Token('/' + lexema, "Comentario Linea", fila, columna));
                         lexema = "";
                         estado = iniciales(codCaracter);
                         continua = false;
@@ -100,46 +97,40 @@ public class Analizador_Nivel {
                     }
                     break;
                 case 8:
-                    if (codCaracter == '!') {
-                        lexema = lexema + codCaracter;
-                        estado = 9;
-                    }
-                    break;
-                case 9:
                     if (codCaracter == '>') {
                         lexema = lexema + codCaracter;
-                        lst_token.add(new Token(lexema, "Comentario multilinea", fila, columna));
+                        lst_token.add(new Token('<'+lexema, "Comentario multilinea", fila, columna));
                         lexema = "";
                         estado = iniciales(codCaracter);
                     }
                     break;
                 case 10:
-                    if (codCaracter == '#') {
-                        lst_token.add(new Token(codCaracter + "", "Numeral", fila, columna));
-                        estado = iniciales(codCaracter);
-                    } else {
-                        lst_token.add(new Token(codCaracter + "", "Asterisco", fila, columna));
-                        estado = iniciales(codCaracter);
-                    }
+
                     break;
             }
         }
     }
 
     private int iniciales(char codCaracter) {
-        int caracter = (int) codCaracter;
         if (Character.isLetter(codCaracter)) {
             return 3;
         } else if (Character.isDigit(codCaracter)) {
             return 1;
         } else if (codCaracter == '-') {
-            return 2;
+            lst_token.add(new Token(codCaracter + "", "Guion", row, columna));
+            estado = 0;
         } else if (codCaracter == '#' || codCaracter == '*') {
-            return 10;
+            if (codCaracter == '#') {
+                lst_token.add(new Token(codCaracter + "", "Numeral", row, columna));
+                estado = 0;
+            } else {
+                lst_token.add(new Token(codCaracter + "", "Asterisco", row, columna));
+                estado = 0;
+            }
         } else if (codCaracter == '/') {
             return 4;
         } else if (codCaracter == '<') {
-
+            return 5;
         } else {
             lst_error.add(new ErrorToken(codCaracter + "", "Caracter Erroneo", columna, row));
         }

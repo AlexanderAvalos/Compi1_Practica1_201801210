@@ -36,28 +36,49 @@ public class Analizador_Piezas {
             }
             switch (estado) {
                 case 1:
-
-                    break;
-                case 2:
-
+                    lexema = lexema + codCaracter;
+                    if (reservada(lexema)) {
+                        if (lexema.equals("v")) {
+                            lst_token.add(new TokenPzs(codCaracter + "", "Simbolos", fila, columna));
+                            lexema = "";
+                            estado = iniciales(codCaracter);
+                        } else {
+                            lst_token.add(new TokenPzs(lexema, "Letra", fila, columna));
+                            lexema = "";
+                            estado = iniciales(codCaracter);
+                        }
+                    } else {
+                        lst_error.add(new ErrorTokenPzs(lexema, "Letra no pertenece a lenguaje", columna, fila));
+                        lexema = "";
+                        estado = iniciales(codCaracter);
+                    }
                     break;
                 case 3:
                     if (codCaracter == '!') {
+                        lexema = lexema + codCaracter;
                         estado = 5;
                     } else {
                         lst_token.add(new TokenPzs(codCaracter + "", "Simbolos", fila, columna));
-                        estado = iniciales(codCaracter);
+                        estado = 0;
                     }
                     break;
                 case 4:
                     if (codCaracter == '/') {
                         estado = 6;
                     } else {
-                        lst_error.add(new ErrorTokenPzs(codCaracter + "", "Caracter Erroneo", columna, row));
+                        lst_error.add(new ErrorTokenPzs(codCaracter + "", "Caracter Erroneo", columna, fila));
                     }
                     break;
                 case 5:
-
+                    if (codCaracter == '!') {
+                        lexema = lexema + codCaracter;
+                        estado = 7;
+                    } else {
+                        lst_token.add(new TokenPzs("<", "Simbolos", fila, columna));
+                        lexema = "";
+                        columna= columna - 1;
+                        estado = 0;
+                    }
                     break;
                 case 6:
                     if (codCaracter == '\n' && cierre == true) {
@@ -74,6 +95,27 @@ public class Analizador_Piezas {
                         continua = true;
                     }
                     break;
+                case 7:
+                    if (codCaracter == '!' && cierre == true) {
+                        lexema = lexema + codCaracter;
+                        estado = 8;
+                        continua = false;
+                        cierre = false;
+                    } else {
+                        lexema = lexema + codCaracter;
+                        estado = 7;
+                        cierre = true;
+                        continua = true;
+                    }
+                    break;
+                case 8:
+                    if (codCaracter == '>') {
+                        lexema = lexema + codCaracter;
+                        lst_token.add(new TokenPzs('/' + lexema, "Comentario Linea", fila, columna));
+                        lexema = "";
+                        estado = iniciales(codCaracter);
+                    }
+                    break;
             }
         }
     }
@@ -85,7 +127,8 @@ public class Analizador_Piezas {
         } else if (Character.isDigit(codCaracter)) {
             lst_error.add(new ErrorTokenPzs(codCaracter + "", "No hay numeros en el lenguaje", columna, row));
         } else if (codCaracter == ',') {
-            return 2;
+            lst_token.add(new TokenPzs(codCaracter + "", "coma", row, columna));
+            estado = 0;
         } else if (codCaracter == 'v' || codCaracter == '^' || codCaracter == '>' || codCaracter == '<') {
             return 3;
         } else if (codCaracter == '/') {
@@ -94,5 +137,27 @@ public class Analizador_Piezas {
             lst_error.add(new ErrorTokenPzs(codCaracter + "", "Caracter Erroneo", columna, row));
         }
         return 0;
+    }
+
+    private boolean reservada(String letra) {
+        if (letra.equals("L")) {
+            return true;
+        } else if (letra.equals("I")) {
+            return true;
+        } else if (letra.equals("S")) {
+            return true;
+        } else if (letra.equals("Z")) {
+            return true;
+        } else if (letra.equals("T")) {
+            return true;
+        } else if (letra.equals("O")) {
+            return true;
+        } else if (letra.equals("J")) {
+            return true;
+        } else if (letra.equals("v")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

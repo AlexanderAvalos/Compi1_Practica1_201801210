@@ -11,8 +11,12 @@ import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -69,6 +73,7 @@ public class Inicio extends javax.swing.JFrame {
         jMenu3 = new javax.swing.JMenu();
         jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem9 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -221,6 +226,14 @@ public class Inicio extends javax.swing.JFrame {
         });
         jMenu3.add(jMenuItem3);
 
+        jMenuItem9.setText("Reportes");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem9);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -349,6 +362,75 @@ public class Inicio extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        try {
+            reporteTokenNivel();
+            reporteTokenPieza();
+        } catch (IOException ex) {
+            Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
+    private void reporteTokenNivel() throws IOException {
+        PrintWriter sw = new PrintWriter(new FileWriter("Reporte_Token_Nivel.html"));
+        sw.print("<HTML>");
+        sw.println("<HEAD>");
+        sw.println("</HEAD>");
+        sw.println("<BODY>");
+        sw.println("<table border=\"2\"  border-collapse= \" collapse \" >");
+        sw.println("<tr>");
+        sw.println("<th > Numero </th> ");
+        sw.println("<th> Lexema </th> ");
+        sw.println("<th> Lexico </th> ");
+        sw.println("<th> Fila </th> ");
+        sw.println("<th> Columna </th> ");
+        sw.println("</tr>");
+        for (int i = 0; i < AnalizadorLVL.lst_token.size(); i++) {
+            sw.println("<tr>");
+            sw.println("<td>" + i + " </td> ");
+            sw.println("<td> " + AnalizadorLVL.lst_token.get(i).lexema + " </td> ");
+            sw.println("<td> " + AnalizadorLVL.lst_token.get(i).lexico + " </td> ");
+            sw.println("<td> " + AnalizadorLVL.lst_token.get(i).Fila + " </td> ");
+            sw.println("<td> " + AnalizadorLVL.lst_token.get(i).Columna + " </td> ");
+            sw.println("</tr>");
+            if (AnalizadorLVL.lst_token.get(i).lexico.equals("Comentario multilinea")) {
+                System.out.println(AnalizadorLVL.lst_token.get(i).lexema);
+            }
+        }
+        sw.println("</table>");
+        sw.println("</BODY>");
+        sw.println("</HTML>");
+        sw.close();
+    }
+
+    private void reporteTokenPieza() throws IOException {
+        PrintWriter sw = new PrintWriter(new FileWriter("Reporte_Token_Piezas.html"));
+        sw.print("<HTML>");
+        sw.println("<HEAD>");
+        sw.println("</HEAD>");
+        sw.println("<BODY>");
+        sw.println("<table border=\"2\"  border-collapse= \" collapse \" >");
+        sw.println("<tr>");
+        sw.println("<th > Numero </th> ");
+        sw.println("<th> Lexema </th> ");
+        sw.println("<th> Lexico </th> ");
+        sw.println("<th> Fila </th> ");
+        sw.println("<th> Columna </th> ");
+        sw.println("</tr>");
+        for (int i = 0; i < AnalizadorPZS.lst_token.size(); i++) {
+            sw.println("<tr>");
+            sw.println("<td>" + i + " </td> ");
+            sw.println("<td> " + AnalizadorPZS.lst_token.get(i).lexema + " </td> ");
+            sw.println("<td> " + AnalizadorPZS.lst_token.get(i).lexico + " </td> ");
+            sw.println("<td> " + AnalizadorPZS.lst_token.get(i).Fila + " </td> ");
+            sw.println("<td> " + AnalizadorPZS.lst_token.get(i).Columna + " </td> ");
+            sw.println("</tr>");
+        }
+        sw.println("</table>");
+        sw.println("</BODY>");
+        sw.println("</HTML>");
+        sw.close();
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -405,6 +487,7 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
