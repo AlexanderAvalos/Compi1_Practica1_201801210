@@ -99,7 +99,7 @@ public class Analizador_Nivel {
                 case 8:
                     if (codCaracter == '>') {
                         lexema = lexema + codCaracter;
-                        lst_token.add(new Token('<'+lexema, "Comentario multilinea", fila, columna));
+                        lst_token.add(new Token(lexema, "Comentario multilinea", fila, columna));
                         lexema = "";
                         estado = iniciales(codCaracter);
                     }

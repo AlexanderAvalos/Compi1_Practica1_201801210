@@ -54,13 +54,9 @@ public class Analizador_Piezas {
                     }
                     break;
                 case 3:
-                    if (codCaracter == '!') {
-                        lexema = lexema + codCaracter;
-                        estado = 5;
-                    } else {
-                        lst_token.add(new TokenPzs(codCaracter + "", "Simbolos", fila, columna));
-                        estado = 0;
-                    }
+                    lst_token.add(new TokenPzs(codCaracter + "", "Simbolos", fila, columna));
+                    estado = 0;
+
                     break;
                 case 4:
                     if (codCaracter == '/') {
@@ -70,13 +66,17 @@ public class Analizador_Piezas {
                     }
                     break;
                 case 5:
+                    if (codCaracter == '<') {
+                        estado = 2;
+                    }
+                    break;
+                case 2:
                     if (codCaracter == '!') {
                         lexema = lexema + codCaracter;
                         estado = 7;
                     } else {
                         lst_token.add(new TokenPzs("<", "Simbolos", fila, columna));
                         lexema = "";
-                        columna= columna - 1;
                         estado = 0;
                     }
                     break;
@@ -96,7 +96,7 @@ public class Analizador_Piezas {
                     }
                     break;
                 case 7:
-                    if (codCaracter == '!' && cierre == true) {
+                    if (codCaracter == '>' && cierre == true) {
                         lexema = lexema + codCaracter;
                         estado = 8;
                         continua = false;
@@ -109,12 +109,11 @@ public class Analizador_Piezas {
                     }
                     break;
                 case 8:
-                    if (codCaracter == '>') {
-                        lexema = lexema + codCaracter;
-                        lst_token.add(new TokenPzs('/' + lexema, "Comentario Linea", fila, columna));
-                        lexema = "";
-                        estado = iniciales(codCaracter);
-                    }
+                    lexema = lexema + codCaracter;
+                    lst_token.add(new TokenPzs(lexema, "Comentario multilinea", fila, columna));
+                    lexema = "";
+                    estado = iniciales(codCaracter);
+
                     break;
             }
         }
@@ -129,8 +128,10 @@ public class Analizador_Piezas {
         } else if (codCaracter == ',') {
             lst_token.add(new TokenPzs(codCaracter + "", "coma", row, columna));
             estado = 0;
-        } else if (codCaracter == 'v' || codCaracter == '^' || codCaracter == '>' || codCaracter == '<') {
+        } else if (codCaracter == 'v' || codCaracter == '^' || codCaracter == '>') {
             return 3;
+        } else if (codCaracter == '<') {
+            return 5;
         } else if (codCaracter == '/') {
             return 4;
         } else {

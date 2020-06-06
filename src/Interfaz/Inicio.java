@@ -366,6 +366,8 @@ public class Inicio extends javax.swing.JFrame {
         try {
             reporteTokenNivel();
             reporteTokenPieza();
+            reporteTokenErrorNivel();
+            reporteTokenErrorPieza();
         } catch (IOException ex) {
             Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -376,7 +378,8 @@ public class Inicio extends javax.swing.JFrame {
         sw.println("<HEAD>");
         sw.println("</HEAD>");
         sw.println("<BODY>");
-        sw.println("<table border=\"2\"  border-collapse= \" collapse \" >");
+        sw.println("<Center><table border=\"2\"  border-collapse= \" collapse \" ></Center>");
+        sw.println("<Center><TH COLSPAN = 5 > Tabla Tokens Nivel</TH></Center>");
         sw.println("<tr>");
         sw.println("<th > Numero </th> ");
         sw.println("<th> Lexema </th> ");
@@ -392,9 +395,36 @@ public class Inicio extends javax.swing.JFrame {
             sw.println("<td> " + AnalizadorLVL.lst_token.get(i).Fila + " </td> ");
             sw.println("<td> " + AnalizadorLVL.lst_token.get(i).Columna + " </td> ");
             sw.println("</tr>");
-            if (AnalizadorLVL.lst_token.get(i).lexico.equals("Comentario multilinea")) {
-                System.out.println(AnalizadorLVL.lst_token.get(i).lexema);
-            }
+        }
+        sw.println("</table>");
+        sw.println("</BODY>");
+        sw.println("</HTML>");
+        sw.close();
+    }
+
+    private void reporteTokenErrorNivel() throws IOException {
+        PrintWriter sw = new PrintWriter(new FileWriter("Reporte_Token_Nivel.html"));
+        sw.print("<HTML>");
+        sw.println("<HEAD>");
+        sw.println("</HEAD>");
+        sw.println("<BODY>");
+        sw.println("<Center><table border=\"2\"  border-collapse= \" collapse \" ></Center>");
+        sw.println("<Center><TH COLSPAN = 5 > Tabla Tokens Nivel</TH></Center>");
+        sw.println("<tr>");
+        sw.println("<th > Numero </th> ");
+        sw.println("<th> Caracter </th> ");
+        sw.println("<th> Descripcion </th> ");
+        sw.println("<th> Fila </th> ");
+        sw.println("<th> Columna </th> ");
+        sw.println("</tr>");
+        for (int i = 0; i < AnalizadorLVL.lst_error.size(); i++) {
+            sw.println("<tr>");
+            sw.println("<td>" + i + " </td> ");
+            sw.println("<td> " + AnalizadorLVL.lst_error.get(i).Caracter + " </td> ");
+            sw.println("<td> " + AnalizadorLVL.lst_error.get(i).Descripcion + " </td> ");
+            sw.println("<td> " + AnalizadorLVL.lst_error.get(i).fila + " </td> ");
+            sw.println("<td> " + AnalizadorLVL.lst_error.get(i).columna + " </td> ");
+            sw.println("</tr>");
         }
         sw.println("</table>");
         sw.println("</BODY>");
@@ -408,8 +438,9 @@ public class Inicio extends javax.swing.JFrame {
         sw.println("<HEAD>");
         sw.println("</HEAD>");
         sw.println("<BODY>");
-        sw.println("<table border=\"2\"  border-collapse= \" collapse \" >");
-        sw.println("<tr>");
+        sw.println("<Center><table border=\"2\"  border-collapse= \" collapse \" ></Center>");
+        sw.println("<Center><TH COLSPAN = 5 > Tabla Tokens Piezas</TH></Center>");
+        sw.println("<tr ALIGN=center>");
         sw.println("<th > Numero </th> ");
         sw.println("<th> Lexema </th> ");
         sw.println("<th> Lexico </th> ");
@@ -417,12 +448,42 @@ public class Inicio extends javax.swing.JFrame {
         sw.println("<th> Columna </th> ");
         sw.println("</tr>");
         for (int i = 0; i < AnalizadorPZS.lst_token.size(); i++) {
-            sw.println("<tr>");
+            sw.println("<tr ALIGN=center >");
             sw.println("<td>" + i + " </td> ");
             sw.println("<td> " + AnalizadorPZS.lst_token.get(i).lexema + " </td> ");
             sw.println("<td> " + AnalizadorPZS.lst_token.get(i).lexico + " </td> ");
             sw.println("<td> " + AnalizadorPZS.lst_token.get(i).Fila + " </td> ");
             sw.println("<td> " + AnalizadorPZS.lst_token.get(i).Columna + " </td> ");
+            sw.println("</tr>");
+        }
+        sw.println("</table>");
+        sw.println("</BODY>");
+        sw.println("</HTML>");
+        sw.close();
+    }
+
+    private void reporteTokenErrorPieza() throws IOException {
+        PrintWriter sw = new PrintWriter(new FileWriter("Reporte_Token_Nivel.html"));
+        sw.print("<HTML>");
+        sw.println("<HEAD>");
+        sw.println("</HEAD>");
+        sw.println("<BODY>");
+        sw.println("<Center><table border=\"2\"  border-collapse= \" collapse \" ></Center>");
+        sw.println("<Center><TH COLSPAN = 5 > Tabla Tokens Nivel</TH></Center>");
+        sw.println("<tr>");
+        sw.println("<th > Numero </th> ");
+        sw.println("<th> Caracter </th> ");
+        sw.println("<th> Descripcion </th> ");
+        sw.println("<th> Fila </th> ");
+        sw.println("<th> Columna </th> ");
+        sw.println("</tr>");
+        for (int i = 0; i < AnalizadorPZS.lst_error.size(); i++) {
+            sw.println("<tr>");
+            sw.println("<td>" + i + " </td> ");
+            sw.println("<td> " + AnalizadorPZS.lst_error.get(i).Caracter + " </td> ");
+            sw.println("<td> " + AnalizadorPZS.lst_error.get(i).Descripcion + " </td> ");
+            sw.println("<td> " + AnalizadorPZS.lst_error.get(i).fila + " </td> ");
+            sw.println("<td> " + AnalizadorPZS.lst_error.get(i).columna + " </td> ");
             sw.println("</tr>");
         }
         sw.println("</table>");
