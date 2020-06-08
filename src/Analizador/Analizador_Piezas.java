@@ -6,6 +6,7 @@
 package Analizador;
 
 import Clases.ErrorTokenPzs;
+import Clases.Piezas;
 import Clases.TokenPzs;
 import java.util.ArrayList;
 
@@ -15,12 +16,15 @@ import java.util.ArrayList;
  */
 public class Analizador_Piezas {
 
+    public ArrayList<Piezas> lst_piezas = new ArrayList<>();
     public ArrayList<TokenPzs> lst_token = new ArrayList<>();
     public ArrayList<ErrorTokenPzs> lst_error = new ArrayList<>();
+    private Piezas pzs_actual;
     private int columna, row;
     private boolean continua = false, cierre = false;
     private int estado = 0;
     private String lexema = "";
+    private boolean primero = false;
 
     public void analizadorPieza(String linea, int fila) {
         row = fila;
@@ -34,15 +38,26 @@ public class Analizador_Piezas {
             if (estado == 0 && continua == false) {
                 estado = iniciales(codCaracter);
             }
+
             switch (estado) {
                 case 1:
                     lexema = lexema + codCaracter;
                     if (reservada(lexema)) {
                         if (lexema.equals("v")) {
+                            pzs_actual.setPosicion(lexema);
+                            lst_piezas.add(pzs_actual);
+                            System.out.println("orientacion : " + lexema);
                             lst_token.add(new TokenPzs(codCaracter + "", "Simbolos", fila, columna));
                             lexema = "";
                             estado = iniciales(codCaracter);
+                            pzs_actual = new Piezas();
                         } else {
+                            if (primero == false) {
+                                pzs_actual = new Piezas();
+                                primero = true;
+                            }
+                            pzs_actual.setFigura(lexema);
+                            System.out.print("pieza: " + lexema+ "  ");
                             lst_token.add(new TokenPzs(lexema, "Letra", fila, columna));
                             lexema = "";
                             estado = iniciales(codCaracter);
@@ -54,9 +69,12 @@ public class Analizador_Piezas {
                     }
                     break;
                 case 3:
+                    pzs_actual.setPosicion(lexema);
+                    lst_piezas.add(pzs_actual);
+                    System.out.println("orientacion: " + codCaracter);
                     lst_token.add(new TokenPzs(codCaracter + "", "Simbolos", fila, columna));
                     estado = 0;
-
+                    pzs_actual = new Piezas();
                     break;
                 case 4:
                     if (codCaracter == '/') {
@@ -75,9 +93,13 @@ public class Analizador_Piezas {
                         lexema = lexema + codCaracter;
                         estado = 7;
                     } else {
+                        pzs_actual.setPosicion(lexema);
+                        lst_piezas.add(pzs_actual);
+                        System.out.println("orientacion: " + "<");
                         lst_token.add(new TokenPzs("<", "Simbolos", fila, columna));
                         lexema = "";
                         estado = 0;
+                        pzs_actual = new Piezas();
                     }
                     break;
                 case 6:
@@ -113,7 +135,6 @@ public class Analizador_Piezas {
                     lst_token.add(new TokenPzs(lexema, "Comentario multilinea", fila, columna));
                     lexema = "";
                     estado = iniciales(codCaracter);
-
                     break;
             }
         }

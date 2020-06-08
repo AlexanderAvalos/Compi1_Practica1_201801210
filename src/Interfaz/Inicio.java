@@ -105,8 +105,18 @@ public class Inicio extends javax.swing.JFrame {
         );
 
         jButton1.setText("Rotar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Bajar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("<--");
 
@@ -359,7 +369,6 @@ public class Inicio extends javax.swing.JFrame {
         for (int pos = 0; pos < cadenapzs.length; pos++) {
             AnalizadorPZS.analizadorPieza(cadenapzs[pos], pos);
         }
-
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
@@ -372,6 +381,18 @@ public class Inicio extends javax.swing.JFrame {
             Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        for (int i = 0; i < AnalizadorLVL.lst_nivel.size(); i++) {
+            System.out.println(AnalizadorLVL.lst_nivel.get(i).getTablero() + '\n');
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+           for (int i = 0; i < AnalizadorPZS.lst_piezas.size(); i++) {
+            System.out.println(AnalizadorPZS.lst_piezas.get(i).getFigura());
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
     private void reporteTokenNivel() throws IOException {
         PrintWriter sw = new PrintWriter(new FileWriter("Reporte_Token_Nivel.html"));
         sw.print("<HTML>");
