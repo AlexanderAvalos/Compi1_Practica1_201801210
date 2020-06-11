@@ -1,6 +1,0 @@
-Archivo piezas:
-Letra|,|s|//cadena|<!cadena!>|&
-s: <,>,^,v
-Archivo Tablero:
-N: numero, L:letra
-NN*|-|L(L|N|_)|#|*|//cadena|<!cadena!>|$

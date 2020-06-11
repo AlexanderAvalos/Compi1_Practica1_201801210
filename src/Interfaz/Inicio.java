@@ -7,7 +7,9 @@ package Interfaz;
 
 import Analizador.Analizador_Nivel;
 import Analizador.Analizador_Piezas;
+import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,13 +19,24 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
+import Figuras.FiguraJ;
+import Figuras.FiguraL;
+import Figuras.FiguraT;
+import Figuras.figul;
+import Figuras.figuraO;
+import Figuras.figuras;
+import Figuras.figuraz;
+import Figuras.pieza;
 
 /**
  *
@@ -35,6 +48,15 @@ public class Inicio extends javax.swing.JFrame {
     private String[] cadenapzs;
     private Analizador.Analizador_Nivel AnalizadorLVL = new Analizador_Nivel();
     private Analizador.Analizador_Piezas AnalizadorPZS = new Analizador_Piezas();
+    private JLabel[][] l = new JLabel[4][4];
+    private JLabel[][] tablero;
+    private javax.swing.border.Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
+    private int fig = 0;
+    private boolean posicion = false; //false = vertical // true = horizontal
+    private int index = 0, indexpieza = 0;
+    private int m = 0, n = 0;
+    private String tab = "", nombre = "";
+    private String fi, orientacion;
 
     public Inicio() {
         initComponents();
@@ -56,11 +78,14 @@ public class Inicio extends javax.swing.JFrame {
         TextPiezas = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        PanelJuego = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jButton6 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -74,6 +99,7 @@ public class Inicio extends javax.swing.JFrame {
         jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
+        jMenuItem10 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -93,15 +119,15 @@ public class Inicio extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         jLabel2.setText("Piezas");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout PanelJuegoLayout = new javax.swing.GroupLayout(PanelJuego);
+        PanelJuego.setLayout(PanelJuegoLayout);
+        PanelJuegoLayout.setHorizontalGroup(
+            PanelJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 588, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        PanelJuegoLayout.setVerticalGroup(
+            PanelJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 589, Short.MAX_VALUE)
         );
 
         jButton1.setText("Rotar");
@@ -119,45 +145,86 @@ public class Inicio extends javax.swing.JFrame {
         });
 
         jButton3.setText("<--");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("-->");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("sig");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+
+        jButton6.setText("obtener pieza");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(PanelJuego, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel2)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(146, Short.MAX_VALUE)
+                .addGap(28, 28, 28)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton1)
-                            .addComponent(jButton2))
+                            .addComponent(jButton2)
+                            .addComponent(jButton5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton3)
-                            .addComponent(jButton4))
+                            .addComponent(jButton4)
+                            .addComponent(jButton6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel1)
                         .addGap(13, 13, 13)
@@ -166,9 +233,7 @@ public class Inicio extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addGap(11, 11, 11)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(PanelJuego, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -214,6 +279,11 @@ public class Inicio extends javax.swing.JFrame {
         jMenu2.add(jMenuItem6);
 
         jMenuItem7.setText("Iniciar");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem7);
 
         jMenuBar1.add(jMenu2);
@@ -244,6 +314,14 @@ public class Inicio extends javax.swing.JFrame {
         });
         jMenu3.add(jMenuItem9);
 
+        jMenuItem10.setText("ReportesErrores");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem10);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -258,13 +336,96 @@ public class Inicio extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void repintar(JLabel[][] pieza) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (pieza[i][j] != null) {
+                    PanelJuego.remove(pieza[i][j]);
+                    pieza[i][j].hide();
+                    pieza[i][j] = null;
+                }
+            }
+        }
+    }
+
+    private void obtener() {
+        m = AnalizadorLVL.lst_nivel.get(index).getM();
+        n = AnalizadorLVL.lst_nivel.get(index).getN();
+        tab = AnalizadorLVL.lst_nivel.get(index).getTablero();
+        nombre = AnalizadorLVL.lst_nivel.get(index).getNombre();
+        jLabel3.setText(nombre);
+        tablero = new JLabel[n][m];
+    }
+
+    private void obtenerPieza() {
+        fi = AnalizadorPZS.lst_piezas.get(indexpieza).getFigura();
+        orientacion = AnalizadorPZS.lst_piezas.get(indexpieza).getPosicion();
+    }
+
+    private void repintarT(JLabel[][] tablero) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                PanelJuego.remove(tablero[i][j]);
+                tablero[i][j].hide();
+                tablero[i][j] = null;
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (tablero[i][j].getText().equals("*")) {
+                    tablero[i][j].setBorder(border);
+                    tablero[i][j].setBackground(Color.YELLOW);
+                    tablero[i][j].setForeground(Color.YELLOW);
+                    tablero[i][j].setOpaque(true);
+                    tablero[i][j].setBounds(new Rectangle(i * 20, (j * 20) + 80, 20, 20));
+                    PanelJuego.add(tablero[i][j]);
+                } else {
+                    tablero[i][j].setBackground(Color.white);
+                    tablero[i][j].setForeground(Color.white);
+                    tablero[i][j].setBorder(border);
+                    tablero[i][j].setOpaque(true);
+                    tablero[i][j].setBounds(new Rectangle(i * 20, (j * 20) + 80, 20, 20));
+                    PanelJuego.add(tablero[i][j]);
+                }
+            }
+        }
+    }
+
+    private void pintar(JLabel[][] tabl) {
+        int ca = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                tablero[j][i] = new JLabel();
+                tablero[j][i].setText(String.valueOf(tab.charAt(ca++)));
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (tabl[i][j].getText().equals("*")) {
+                    tabl[i][j].setBorder(border);
+                    tabl[i][j].setBackground(Color.YELLOW);
+                    tabl[i][j].setForeground(Color.YELLOW);
+                    tabl[i][j].setOpaque(true);
+                    tabl[i][j].setBounds(new Rectangle(i * 20, (j * 20) + 80, 20, 20));
+                    PanelJuego.add(tabl[i][j]);
+                } else {
+                    tabl[i][j].setBackground(Color.white);
+                    tabl[i][j].setForeground(Color.white);
+                    tabl[i][j].setBorder(border);
+                    tabl[i][j].setOpaque(true);
+                    tabl[i][j].setBounds(new Rectangle(i * 20, (j * 20) + 80, 20, 20));
+                    PanelJuego.add(tabl[i][j]);
+                }
+            }
+        }
+    }
+
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         JOptionPane.showMessageDialog(null, "Nombre: Rodolfo Alexander Avalos Soto \n Carnet: 201801210", "Informacion Estudiante", JOptionPane.INFORMATION_MESSAGE);
@@ -317,7 +478,7 @@ public class Inicio extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        File archivo = new File("prueba.txt");
+        File archivo = new File("Manual.docx");
         try {
             Desktop.getDesktop().open(archivo);
         } catch (IOException ex) {
@@ -383,16 +544,254 @@ public class Inicio extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        for (int i = 0; i < AnalizadorLVL.lst_nivel.size(); i++) {
-            System.out.println(AnalizadorLVL.lst_nivel.get(i).getTablero() + '\n');
+
+        rotar(l);
+        mostrar(l);
+        PanelJuego.repaint();
+        if (this.posicion == false) {
+            this.posicion = true;
+        } else {
+            this.posicion = false;
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-           for (int i = 0; i < AnalizadorPZS.lst_piezas.size(); i++) {
-            System.out.println(AnalizadorPZS.lst_piezas.get(i).getFigura());
+
+        obtener_pos(l, tablero);
+        pintar(tablero);
+        PanelJuego.repaint();
+        obtenerPieza();
+        verficar_pieza();
+        if (indexpieza < AnalizadorPZS.lst_piezas.size() - 1) {
+            indexpieza++;
+        } else {
+            indexpieza = 0;
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        repintarT(tablero);
+        obtener();
+        pintar(tablero);
+        this.repaint();
+        if (index < AnalizadorLVL.lst_nivel.size() - 1) {
+            index++;
+        } else {
+            JOptionPane.showMessageDialog(null, "Juego Terminado", "Informacion Estudiante", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        moverI(l);
+
+        this.repaint();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        moverD(l);
+
+        this.repaint();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        obtener();
+        obtenerPieza();
+        verficar_pieza();
+        pintar(tablero);
+        this.repaint();
+        if (AnalizadorLVL.lst_error.size() <= 0) {
+
+            if (index < AnalizadorLVL.lst_nivel.size() - 1) {
+                index++;
+            } else {
+                JOptionPane.showMessageDialog(null, "Juego Terminado", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+            if (indexpieza < AnalizadorPZS.lst_piezas.size() - 1) {
+                indexpieza++;
+            } else {
+                indexpieza = 0;
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Error de compilacion ", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+
+        obtenerPieza();
+        verficar_pieza();
+        if (indexpieza < AnalizadorPZS.lst_piezas.size() - 1) {
+            indexpieza++;
+        } else {
+            indexpieza = 0;
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        try {
+            reporteTokenErrorNivel();
+            reporteTokenErrorPieza();// TODO add your handling code here:
+        } catch (IOException ex) {
+            Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
+    private void verficar_pieza() {
+        switch (fi) {
+            case "I":
+                repintar(l);
+                Figura_I(l);
+                this.repaint();
+                break;
+            case "L":
+                repintar(l);
+                Figura_L(l);
+                this.repaint();
+                break;
+            case "J":
+                repintar(l);
+                Figura_J(l);
+                this.repaint();
+                break;
+            case "T":
+                repintar(l);
+                Figura_T(l);
+                this.repaint();
+                break;
+            case "Z":
+                repintar(l);
+                Figura_z(l);
+                this.repaint();
+                break;
+            case "O":
+                repintar(l);
+                Figura_O(l);
+                this.repaint();
+                break;
+            case "S":
+                repintar(l);
+                Figura_s(l);
+                this.repaint();
+                break;
+        }
+        switch (orientacion) {
+            case ">":
+                rotar(l);
+                mostrar(l);
+                posicion = true;
+                break;
+            case "v":
+                rotar(l);
+                rotar(l);
+                mostrar(l);
+                this.posicion = false;
+                break;
+            case "<":
+                rotar(l);
+                rotar(l);
+                rotar(l);
+                mostrar(l);
+                this.posicion = false;
+                break;
+            case "^":
+                mostrar(l);
+                break;
+
+        }
+
+    }
+
+    private void obtener_pos(JLabel[][] aux, JLabel[][] tab) {
+        ArrayList<Posicion> lst = new ArrayList<>();
+        for (int k = 0; k < 4; k++) {
+            for (int l = 0; l < 4; l++) {
+                for (int i = 0; i < n; i++) {
+                    for (int j = 0; j < m; j++) {
+                        if (aux[k][l] != null) {
+                            if (tab[i][j].getBounds().x == aux[k][l].getBounds().x && (tab[i][j].getBounds().y - 80) == aux[k][l].getBounds().y) {
+                                if (tab[i][j].getText().equals("#")) {
+                                    System.out.println(i + "," + j);
+                                    lst.add(new Posicion(i, j));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        pieza figura = null;
+        switch (fig) {
+            case 1:
+                if (this.posicion) {//horizontal
+                    figura = new FiguraL(lst.get(0).getX(), lst.get(1).getX(), lst.get(2).getX(), lst.get(3).getX(), lst.get(0).getY(), 45);
+                } else {//vertical
+                    figura = new FiguraL(lst.get(0).getX(), lst.get(0).getY(), lst.get(1).getY(), lst.get(2).getY(), lst.get(3).getY());
+                }
+                Thread hilo = new juego(tablero, figura, posicion, fig, m);
+                hilo.start();
+                break;
+            case 2:
+                if (this.posicion) {//horizontal
+                    figura = new FiguraJ(lst.get(0).getX(), lst.get(1).getX(), lst.get(2).getX(), lst.get(3).getX(), lst.get(0).getY(), lst.get(1).getY(), 45);
+                } else {//vertical
+                    figura = new FiguraJ(lst.get(0).getX(), lst.get(1).getX(), lst.get(0).getY(), lst.get(1).getY(), lst.get(2).getY(), lst.get(3).getY());
+                }
+                Thread hilo2 = new juego(tablero, figura, posicion, fig, m);
+                hilo2.start();
+                break;
+            case 3:
+                if (this.posicion) {//horizontal
+                    figura = new figul(lst.get(0).getX(), lst.get(1).getX(), lst.get(2).getX(), lst.get(3).getX(), lst.get(0).getY(), lst.get(1).getY(), 45);
+                } else {//vertical
+                    figura = new figul(lst.get(0).getX(), lst.get(3).getX(), lst.get(0).getY(), lst.get(1).getY(), lst.get(2).getY(), lst.get(3).getY());
+                }
+                Thread hilo3 = new juego(tablero, figura, posicion, fig, m);
+                hilo3.start();
+                break;
+            case 4:
+                if (this.posicion) {//horizontal
+                    figura = new figuraO(lst.get(0).getX(), lst.get(2).getX(), lst.get(0).getY(), lst.get(2).getY());
+                } else {//vertical
+                    figura = new figuraO(lst.get(0).getX(), lst.get(2).getX(), lst.get(0).getY(), lst.get(2).getY());
+                }
+                Thread hilo4 = new juego(tablero, figura, posicion, fig, m);
+                hilo4.start();
+                break;
+            case 5:
+                if (this.posicion) {//horizontal
+                    figura = new FiguraT(lst.get(0).getX(), lst.get(3).getX(), lst.get(0).getY(), lst.get(1).getY(), lst.get(2).getY());
+                } else {//vertical
+                    figura = new FiguraT(lst.get(0).getX(), lst.get(1).getX(), lst.get(3).getX(), lst.get(0).getY(), lst.get(1).getY(), 45);
+                }
+                Thread hilo5 = new juego(tablero, figura, posicion, fig, m);
+                hilo5.start();
+                break;
+            case 6:
+                if (this.posicion) {//horizontal
+                    figura = new figuras(lst.get(0).getX(), lst.get(3).getX(), lst.get(0).getY(), lst.get(1).getY(), lst.get(2).getY());
+                } else {//vertical
+                    figura = new figuras(lst.get(0).getX(), lst.get(1).getX(), lst.get(3).getX(), lst.get(0).getY(), lst.get(1).getY(), 45);
+                }
+                Thread hilo6 = new juego(tablero, figura, posicion, fig, m);
+                hilo6.start();
+                break;
+            case 7:
+                if (this.posicion) {//horizontal
+                    figura = new figuraz(lst.get(0).getX(), lst.get(2).getX(), lst.get(0).getY(), lst.get(1).getY(), lst.get(3).getY());
+                } else {//vertical
+                    figura = new figuraz(lst.get(0).getX(), lst.get(1).getX(), lst.get(3).getX(), lst.get(0).getY(), lst.get(1).getY(), 45);
+                }
+                Thread hilo7 = new juego(tablero, figura, posicion, fig, m);
+                hilo7.start();
+                break;
+        }
+
+    }
+
     private void reporteTokenNivel() throws IOException {
         PrintWriter sw = new PrintWriter(new FileWriter("Reporte_Token_Nivel.html"));
         sw.print("<HTML>");
@@ -424,7 +823,7 @@ public class Inicio extends javax.swing.JFrame {
     }
 
     private void reporteTokenErrorNivel() throws IOException {
-        PrintWriter sw = new PrintWriter(new FileWriter("Reporte_Token_Nivel.html"));
+        PrintWriter sw = new PrintWriter(new FileWriter("ReporteError_Token_Nivel.html"));
         sw.print("<HTML>");
         sw.println("<HEAD>");
         sw.println("</HEAD>");
@@ -484,7 +883,7 @@ public class Inicio extends javax.swing.JFrame {
     }
 
     private void reporteTokenErrorPieza() throws IOException {
-        PrintWriter sw = new PrintWriter(new FileWriter("Reporte_Token_Nivel.html"));
+        PrintWriter sw = new PrintWriter(new FileWriter("ReporteError_Token_pieza.html"));
         sw.print("<HTML>");
         sw.println("<HEAD>");
         sw.println("</HEAD>");
@@ -511,6 +910,241 @@ public class Inicio extends javax.swing.JFrame {
         sw.println("</BODY>");
         sw.println("</HTML>");
         sw.close();
+    }
+
+    private void Figura_I(JLabel[][] figura) {
+        int cont = 0;
+        fig = 1;
+        for (int i = 0; i < 1; i++) {
+            for (int j = 0; j < 4; j++) {
+                l[i][j] = new JLabel();
+                figura[i][j].setText(String.valueOf(++cont));
+                figura[i][j].setBorder(border);
+                figura[i][j].setOpaque(true);
+                figura[i][j].setBackground(Color.CYAN);
+                figura[i][j].setVisible(true);
+                figura[i][j].setBounds(new Rectangle(i * 20, j * 20, 20, 20));
+                PanelJuego.add(figura[i][j]);
+            }
+        }
+    }
+
+    private void Figura_J(JLabel[][] figura) {
+        int cont = 0;
+        fig = 2;
+        for (int i = 1; i < 2; i++) {
+            for (int j = 0; j < 3; j++) {
+
+                l[i][j] = new JLabel();
+                figura[i][j].setText(String.valueOf(++cont));
+                figura[i][j].setBorder(border);
+                figura[i][j].setOpaque(true);
+                figura[i][j].setBackground(Color.CYAN);
+                figura[i][j].setVisible(true);
+                figura[i][j].setBounds(new Rectangle(i * 20, j * 20, 20, 20));
+                PanelJuego.add(figura[i][j]);
+            }
+        }
+        for (int i = 0; i < 1; i++) {
+            for (int j = 2; j < 3; j++) {
+                if (l[i][j] == null) {
+                    l[i][j] = new JLabel();
+                    figura[i][j].setText(String.valueOf(++cont));
+                    figura[i][j].setBorder(border);
+                    figura[i][j].setOpaque(true);
+                    figura[i][j].setBackground(Color.CYAN);
+                    figura[i][j].setVisible(true);
+                    figura[i][j].setBounds(new Rectangle(i * 20, j * 20, 20, 20));
+                    PanelJuego.add(figura[i][j]);
+                }
+            }
+        }
+    }
+
+    private void Figura_L(JLabel[][] figura) {
+        int cont = 0;
+        fig = 3;
+        for (int i = 1; i < 2; i++) {
+            for (int j = 0; j < 3; j++) {
+                l[i][j] = new JLabel();
+                figura[i][j].setText(String.valueOf(++cont));
+                figura[i][j].setBorder(border);
+                figura[i][j].setOpaque(true);
+                figura[i][j].setBackground(Color.CYAN);
+                figura[i][j].setVisible(true);
+                figura[i][j].setBounds(new Rectangle(i * 20, j * 20, 20, 20));
+                PanelJuego.add(figura[i][j]);
+            }
+        }
+        for (int i = 2; i < 3; i++) {
+            for (int j = 2; j < 3; j++) {
+                if (l[i][j] == null) {
+                    l[i][j] = new JLabel();
+                    figura[i][j].setText(String.valueOf(++cont));
+                    figura[i][j].setBorder(border);
+                    figura[i][j].setOpaque(true);
+                    figura[i][j].setBackground(Color.CYAN);
+                    figura[i][j].setVisible(true);
+                    figura[i][j].setBounds(new Rectangle(i * 20, j * 20, 20, 20));
+                    PanelJuego.add(figura[i][j]);
+                }
+            }
+        }
+    }
+
+    private void Figura_O(JLabel[][] figura) {
+        int cont = 0;
+        fig = 4;
+        for (int i = 1; i < 3; i++) {
+            for (int j = 0; j < 2; j++) {
+                l[i][j] = new JLabel();
+                figura[i][j].setText(String.valueOf(++cont));
+                figura[i][j].setBorder(border);
+                figura[i][j].setOpaque(true);
+                figura[i][j].setBackground(Color.CYAN);
+                figura[i][j].setVisible(true);
+                figura[i][j].setBounds(new Rectangle(i * 20, j * 20, 20, 20));
+                PanelJuego.add(figura[i][j]);
+            }
+        }
+    }
+
+    private void Figura_T(JLabel[][] figura) {
+        int cont = 0;
+        fig = 5;
+        for (int i = 1; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                l[i][j] = new JLabel();
+                figura[i][j].setText(String.valueOf(++cont));
+                figura[i][j].setBorder(border);
+                figura[i][j].setOpaque(true);
+                figura[i][j].setBackground(Color.CYAN);
+                figura[i][j].setVisible(true);
+                figura[i][j].setBounds(new Rectangle(i * 20, j * 20, 20, 20));
+                PanelJuego.add(figura[i][j]);
+            }
+        }
+        for (int i = 0; i < 3; i++) {
+            for (int j = 1; j < 2; j++) {
+                if (l[i][j] == null) {
+                    l[i][j] = new JLabel();
+                    figura[i][j].setText(String.valueOf(++cont));
+                    figura[i][j].setBorder(border);
+                    figura[i][j].setOpaque(true);
+                    figura[i][j].setBackground(Color.CYAN);
+                    figura[i][j].setVisible(true);
+                    figura[i][j].setBounds(new Rectangle(i * 20, j * 20, 20, 20));
+                    PanelJuego.add(figura[i][j]);
+                }
+            }
+        }
+    }
+
+    private void Figura_s(JLabel[][] figura) {
+        int cont = 0;
+        fig = 6;
+        for (int i = 2; i < 4; i++) {
+            for (int j = 0; j < 1; j++) {
+                l[i][j] = new JLabel();
+                figura[i][j].setText(String.valueOf(++cont));
+                figura[i][j].setBorder(border);
+                figura[i][j].setOpaque(true);
+                figura[i][j].setBackground(Color.CYAN);
+                figura[i][j].setVisible(true);
+                figura[i][j].setBounds(new Rectangle(i * 20, j * 20, 20, 20));
+                PanelJuego.add(figura[i][j]);
+            }
+        }
+        for (int i = 1; i < 3; i++) {
+            for (int j = 1; j < 2; j++) {
+                l[i][j] = new JLabel();
+                figura[i][j].setText(String.valueOf(++cont));
+                figura[i][j].setBorder(border);
+                figura[i][j].setOpaque(true);
+                figura[i][j].setBackground(Color.CYAN);
+                figura[i][j].setVisible(true);
+                figura[i][j].setBounds(new Rectangle(i * 20, j * 20, 20, 20));
+                PanelJuego.add(figura[i][j]);
+            }
+        }
+    }
+
+    private void Figura_z(JLabel[][] figura) {
+        int cont = 0;
+        fig = 7;
+        for (int i = 1; i < 3; i++) {
+            for (int j = 0; j < 1; j++) {
+                l[i][j] = new JLabel();
+                figura[i][j].setText(String.valueOf(++cont));
+                figura[i][j].setBorder(border);
+                figura[i][j].setOpaque(true);
+                figura[i][j].setBackground(Color.CYAN);
+                figura[i][j].setVisible(true);
+                figura[i][j].setBounds(new Rectangle(i * 20, j * 20, 20, 20));
+                PanelJuego.add(figura[i][j]);
+            }
+        }
+        for (int i = 2; i < 4; i++) {
+            for (int j = 1; j < 2; j++) {
+                l[i][j] = new JLabel();
+                figura[i][j].setText(String.valueOf(++cont));
+                figura[i][j].setBorder(border);
+                figura[i][j].setOpaque(true);
+                figura[i][j].setBackground(Color.CYAN);
+                figura[i][j].setVisible(true);
+                figura[i][j].setBounds(new Rectangle(i * 20, j * 20, 20, 20));
+                PanelJuego.add(figura[i][j]);
+            }
+        }
+    }
+
+    private JLabel[][] rotar(JLabel[][] figura) {
+        JLabel[][] nueva = new JLabel[4][4];
+        for (int i = 0, j = 3; i < 4 && j >= 0; i++, j--) {
+            for (int k = 0; k < 4; k++) {
+                nueva[i][k] = figura[k][j];
+            }
+        }
+        return nueva;
+    }
+
+    private void moverD(JLabel[][] figura) {
+        for (int i = 0; i < 4; i++) {
+            if (figura[i] != null) {
+                for (int j = 0; j < 4; j++) {
+                    if (figura[i][j] != null) {
+                        figura[i][j].setBounds(new Rectangle(figura[i][j].getBounds().x + 20, j * 20, 20, 20));
+                    }
+                }
+            }
+        }
+    }
+
+    private void moverI(JLabel[][] figura) {
+        for (int i = 0; i < 4; i++) {
+            if (figura[i] != null) {
+                for (int j = 0; j < 4; j++) {
+                    if (figura[i][j] != null) {
+                        figura[i][j].setBounds(new Rectangle(figura[i][j].getBounds().x - 20, j * 20, 20, 20));
+                    }
+                }
+            }
+        }
+    }
+
+    private void mostrar(JLabel[][] figura) {
+        for (int i = 0; i < 4; i++) {
+            if (figura[i] != null) {
+                for (int j = 0; j < 4; j++) {
+                    if (figura[i][j] != null) {
+                        figura[i][j].setOpaque(true);
+                        figura[i][j].setBounds(new Rectangle(i * 20, j * 20, 20, 20));
+                        figura[i][j].setVisible(true);
+                        PanelJuego.add(figura[i][j]);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -549,19 +1183,24 @@ public class Inicio extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel PanelJuego;
     private javax.swing.JTextArea TextNiveles;
     private javax.swing.JTextArea TextPiezas;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
@@ -571,8 +1210,8 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
+
 }
